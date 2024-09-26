@@ -1,32 +1,39 @@
 import { useEffect, useState } from "react";
 
-const useWebShare = () => {
+export type ShareProps = {
+  title?: string;
+  text?: string;
+  url?: string;
+};
+
+export function useWebShare() {
   const [canShare, setCanShare] = useState(false);
+  const [cancelledShare, setCancelledShare] = useState(false);
 
   useEffect(() => {
     setCanShare(!!navigator.share);
   }, []);
 
-  const share = async (
-    { title, text, url }: { title?: string; text?: string; url?: string },
-  ) => {
+  const share = async (props: ShareProps) => {
     if (canShare) {
       try {
         await navigator.share({
-          text,
-          title: title ?? document.title,
-          url: url ?? window.location.href,
+          text: props.text,
+          title: props.title ?? document.title,
+          url: props.url ?? window.location.href,
         });
         return true;
       } catch (error) {
-        console.error("Error sharing:", error);
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          setCancelledShare(true);
+        } else {
+          console.error("Error sharing:", error);
+        }
         return false;
       }
     }
     return false;
   };
 
-  return { canShare, share };
-};
-
-export default useWebShare;
+  return { canShare, share, cancelledShare };
+}

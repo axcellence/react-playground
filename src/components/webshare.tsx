@@ -1,32 +1,23 @@
-import useWebShare from '../hooks/useWebShare';
+import { useWebShare, type ShareProps } from '../hooks/useWebShare';
 
-type ShareButtonProps = {
-  title?: string;
-  text?: string;
-  url?: string;
-};
-
-const ShareButton = (props: ShareButtonProps) => {
+export function ShareButton(props: ShareProps) {
   const { canShare, share } = useWebShare();
 
   const handleShare = async () => {
     if (canShare) {
-      const shared = await share(props);
-      if (shared) {
-        console.log('Content was shared successfully');
-      } else {
-        console.log('Sharing failed');
+      try {
+        await share(props);
+      } catch {
+        console.error(`Sharing failed`);
       }
     } else {
-      console.log('Web Share API is not supported in this browser');
+      console.warn('Web Share API is not supported in this browser');
     }
   };
 
-  return (  
+  return (
     <button onClick={handleShare} disabled={!canShare} hidden={!canShare}>
       Share
     </button>
   );
 };
-
-export default ShareButton;
