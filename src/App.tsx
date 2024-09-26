@@ -1,12 +1,11 @@
 import './App.css'
-import ShareButton from './components/webshare'
+import { ShareButton } from './components/webshare'
 
 function App() {
 
   return (
     <>
-      <ShareButton
-      />
+      <ShareButton />
     </>
   )
 }
