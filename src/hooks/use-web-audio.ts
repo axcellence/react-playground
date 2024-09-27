@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-type WebAudioProps = {};
+type WebAudioProps = {
+  format?: AudioFormat;
+};
 
 type RecordingStatus =
   | "Recording started..."
@@ -9,17 +11,19 @@ type RecordingStatus =
   | "Press 'Start Recording' to begin."
   | "Recording paused.";
 
-type RecordingState = "recording" | "stopped" | "paused" | "error";
+type RecordingState = "recording" | "finished" | "paused" | "error";
 
-export function useWebAudio() {
+type AudioFormat = "audio/wav" | "audio/mp3" | "audio/ogg" | "audio/mp4";
+
+export function useWebAudio(props?: WebAudioProps) {
   const [recordingState, setRecordingState] = useState<RecordingState>(
-    "stopped",
+    "finished",
   );
   const [status, setStatus] = useState<RecordingStatus>(
     "Press 'Start Recording' to begin.",
   );
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-
+  const [audioFormat] = useState<AudioFormat>(props?.format ?? "audio/wav");
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
@@ -38,10 +42,9 @@ export function useWebAudio() {
 
       mediaRecorderRef.current.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/wav",
+          type: audioFormat,
         });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        setAudioUrl(audioUrl);
+        setAudioUrl(URL.createObjectURL(audioBlob));
         audioChunksRef.current = [];
         setStatus("Recording stopped. Ready to play!");
       };
@@ -76,8 +79,7 @@ export function useWebAudio() {
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      setRecordingState("stopped");
-      setStatus("Recording stopped. Ready to play!");
+      setRecordingState("finished");
     }
   };
   return {
