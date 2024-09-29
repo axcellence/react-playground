@@ -79,3 +79,26 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+@layer components {
+  .shimmer {
+    color: transparent;
+    line-height: 1.4em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    border-radius: 4px;
+    background:  linear-gradient(to right, #c1c0c0 33%, #f1f0f0, #c1c0c0 66%);
+    background-size: 300%;
+    animation: shimmer 2s infinite ease-in-out;
+  }
+
+  @keyframes shimmer {
+    from {
+      background-position: 100%;
+    }
+    
+    to {
+      background-position: 0%;
+    }
+  }
+}
