@@ -5,9 +5,9 @@ import {
   PauseIcon,
 } from "lucide-react";
 
-import { cn } from "../lib/utils";
-import { Button } from "./ui/button";
-import { useWebAudio } from "../hooks/use-web-audio";
+import { cn } from "../../lib/utils";
+import { Button } from "../ui/button";
+import { useWebAudio } from "./use-web-audio";
 
 export function AudioRecorder() {
   const {

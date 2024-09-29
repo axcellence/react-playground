@@ -1,6 +1,6 @@
 import './App.css'
-import { AudioRecorder } from './components/audio-recorder'
-import { ShareButton } from './components/webshare'
+import { AudioRecorder } from './components/audio-recorder/audio-recorder'
+import { ShareButton } from './components/web-share/webshare'
 import { Geolocation } from './components/geolocation/geolocation'
 
 function App() {

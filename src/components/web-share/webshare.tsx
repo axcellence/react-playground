@@ -1,4 +1,4 @@
-import { useWebShare, type ShareProps } from '../hooks/useWebShare';
+import { useWebShare, type ShareProps } from './useWebShare';
 
 export function ShareButton(props: ShareProps) {
   const { canShare, share } = useWebShare();
