@@ -11,6 +11,7 @@ export function useGeolocation() {
   const permissionStatus = usePermissions("geolocation");
   const [location, setLocation] = useState<GeolocationPosition["coords"]>();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<GeolocationPositionError>();
 
   const requestLocationFunction = async () => {
     setIsLoading(true);
@@ -18,7 +19,7 @@ export function useGeolocation() {
     getGeolocation().then((position) => {
       setLocation(position.coords);
     }).catch((error) => {
-      console.error(error);
+      setError(error);
     }).finally(() => {
       setIsLoading(false);
     });
@@ -29,5 +30,6 @@ export function useGeolocation() {
     isLoading,
     isGranted: permissionStatus.isGranted,
     location,
+    error,
   };
 }
